@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 // Objetivo: Lanzar varias goroutines que imprimen mensajes y esperar a que todas terminen.
@@ -11,12 +10,11 @@ import (
 
 func worker(id int, veces int, wg *sync.WaitGroup) {
 	// TODO: asegurar que al finalizar la función se haga wg.Done()
-	
 
 	for i := 1; i <= veces; i++ {
 		fmt.Printf("[worker %d] hola %d\n", id, i)
-		// TODO: dormir un poco para simular trabajo (p. ej. 100–300 ms)
-		
+		// TODO: dormir hola un poco para simular trabajo (p. ej. 100–300 ms)
+
 	}
 }
 
@@ -33,6 +31,6 @@ func main() {
 	}
 
 	// Esperar a que todas las goroutines terminen
-	
+
 	fmt.Println("Listo: todas las goroutines terminaron.")
 }
