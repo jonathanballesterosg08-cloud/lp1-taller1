@@ -16,14 +16,20 @@ type trabajo struct {
 }
 
 type resultado struct {
-	ID       int
-	X        int
+	ID        int
+	X         int
 	Procesado int
 }
 
 func worker(id int, jobs <-chan trabajo, results chan<- resultado, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for j := range jobs {
+		time.Sleep(100 * time.Millisecond)
+		r := resultado{
+			ID:        j.ID,
+			X:         j.X,
+			Procesado: j.X * 2,
+		}
 		// TODO: procesar j (simular trabajo con Sleep)
 
 		fmt.Printf("[worker %d] procesa trabajo %d -> %d\n", id, j.ID, r.Procesado)
@@ -44,13 +50,13 @@ func main() {
 	// TODO: lanzar nWorkers workers
 	wg.Add(nWorkers)
 	for i := 1; i <= nWorkers; i++ {
-
+		go worker(i, jobs, results, &wg)
 	}
 
 	// TODO: productor de trabajos
 	go func() {
 		for i := 1; i <= nTrabajos; i++ {
-
+			jobs <- trabajo{ID: i, X: i * 10}
 		}
 		close(jobs) // importante: cerrar para que los workers terminen
 	}()
